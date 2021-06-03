@@ -50,7 +50,6 @@ These are used for some further challenges. You can **safely skip them if you ar
 Feel free to use any libraries you would use if this were a real production App, but remember we're interested in your code & the way you solve the problem, not how well you can use a particular library. We're interested in your method and how you approach the problem just as much as we're interested in the end result.
 
 Here's what you should aim for:
-- Solid testing approach.
 - Extensible code.
 - Feel free to cut corners, but make a note where you do, and be prepared to explain what you
 would do in a production context

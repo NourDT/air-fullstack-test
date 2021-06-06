@@ -33,6 +33,12 @@ There's a folder in this repo that contains mockups for a simple candidate reser
     - Use any modern JS framework such as([React](https://reactjs.org/) to build a simple frontend solution.     
     - Feel free to use any JS frameworks such as React-Router, and packing tools such as Webpack or Parcel etc.
 
+- Backend oriented
+    - S3 and cloudfront, GraphQL api provisioned through Amplify 
+    - API Gateway and lambda provisioned and deployed through terraform 
+- Frontend oriented
+    - Using Angular Typescript
+
 ### Bonus
 - Write clear **documentation** on how it's designed and how to run the code.
 - Write good commit messages.

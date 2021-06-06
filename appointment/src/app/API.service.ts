@@ -1,9 +1,9 @@
 /* tslint:disable */
 /* eslint-disable */
 //  This file was automatically generated and should not be edited.
-import { Injectable } from "@angular/core";
-import API, { graphqlOperation, GraphQLResult } from "@aws-amplify/api-graphql";
-import { Observable } from "zen-observable-ts";
+import { Injectable } from '@angular/core';
+import API, { graphqlOperation, GraphQLResult } from '@aws-amplify/api-graphql';
+import { Observable } from 'zen-observable-ts';
 
 export interface SubscriptionResponse<T> {
   value: GraphQLResult<T>;
@@ -50,16 +50,16 @@ export type ModelStringInput = {
 };
 
 export enum ModelAttributeTypes {
-  binary = "binary",
-  binarySet = "binarySet",
-  bool = "bool",
-  list = "list",
-  map = "map",
-  number = "number",
-  numberSet = "numberSet",
-  string = "string",
-  stringSet = "stringSet",
-  _null = "_null"
+  binary = 'binary',
+  binarySet = 'binarySet',
+  bool = 'bool',
+  list = 'list',
+  map = 'map',
+  number = 'number',
+  numberSet = 'numberSet',
+  string = 'string',
+  stringSet = 'stringSet',
+  _null = '_null',
 }
 
 export type ModelSizeInput = {
@@ -85,7 +85,7 @@ export type ModelIntInput = {
 };
 
 export type Appointment = {
-  __typename: "Appointment";
+  __typename: 'Appointment';
   id: string;
   candidateId: string;
   eventName: string;
@@ -144,13 +144,13 @@ export type ModelIDInput = {
 };
 
 export type ModelAppointmentConnection = {
-  __typename: "ModelAppointmentConnection";
+  __typename: 'ModelAppointmentConnection';
   items?: Array<Appointment | null> | null;
   nextToken?: string | null;
 };
 
 export type CreateAppointmentMutation = {
-  __typename: "Appointment";
+  __typename: 'Appointment';
   id: string;
   candidateId: string;
   eventName: string;
@@ -164,7 +164,7 @@ export type CreateAppointmentMutation = {
 };
 
 export type UpdateAppointmentMutation = {
-  __typename: "Appointment";
+  __typename: 'Appointment';
   id: string;
   candidateId: string;
   eventName: string;
@@ -178,7 +178,7 @@ export type UpdateAppointmentMutation = {
 };
 
 export type DeleteAppointmentMutation = {
-  __typename: "Appointment";
+  __typename: 'Appointment';
   id: string;
   candidateId: string;
   eventName: string;
@@ -192,7 +192,7 @@ export type DeleteAppointmentMutation = {
 };
 
 export type GetAppointmentQuery = {
-  __typename: "Appointment";
+  __typename: 'Appointment';
   id: string;
   candidateId: string;
   eventName: string;
@@ -206,9 +206,9 @@ export type GetAppointmentQuery = {
 };
 
 export type ListAppointmentsQuery = {
-  __typename: "ModelAppointmentConnection";
+  __typename: 'ModelAppointmentConnection';
   items?: Array<{
-    __typename: "Appointment";
+    __typename: 'Appointment';
     id: string;
     candidateId: string;
     eventName: string;
@@ -224,7 +224,7 @@ export type ListAppointmentsQuery = {
 };
 
 export type OnCreateAppointmentSubscription = {
-  __typename: "Appointment";
+  __typename: 'Appointment';
   id: string;
   candidateId: string;
   eventName: string;
@@ -238,7 +238,7 @@ export type OnCreateAppointmentSubscription = {
 };
 
 export type OnUpdateAppointmentSubscription = {
-  __typename: "Appointment";
+  __typename: 'Appointment';
   id: string;
   candidateId: string;
   eventName: string;
@@ -252,7 +252,7 @@ export type OnUpdateAppointmentSubscription = {
 };
 
 export type OnDeleteAppointmentSubscription = {
-  __typename: "Appointment";
+  __typename: 'Appointment';
   id: string;
   candidateId: string;
   eventName: string;
@@ -266,7 +266,7 @@ export type OnDeleteAppointmentSubscription = {
 };
 
 @Injectable({
-  providedIn: "root"
+  providedIn: 'root',
 })
 export class APIService {
   async CreateAppointment(
@@ -289,7 +289,7 @@ export class APIService {
         }
       }`;
     const gqlAPIServiceArguments: any = {
-      input
+      input,
     };
     if (condition) {
       gqlAPIServiceArguments.condition = condition;
@@ -319,7 +319,7 @@ export class APIService {
         }
       }`;
     const gqlAPIServiceArguments: any = {
-      input
+      input,
     };
     if (condition) {
       gqlAPIServiceArguments.condition = condition;
@@ -349,7 +349,7 @@ export class APIService {
         }
       }`;
     const gqlAPIServiceArguments: any = {
-      input
+      input,
     };
     if (condition) {
       gqlAPIServiceArguments.condition = condition;
@@ -376,7 +376,7 @@ export class APIService {
         }
       }`;
     const gqlAPIServiceArguments: any = {
-      id
+      id,
     };
     const response = (await API.graphql(
       graphqlOperation(statement, gqlAPIServiceArguments)

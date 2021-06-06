@@ -8,17 +8,14 @@ import { ConfirmappointmentComponent } from './components/confirmappointment/con
 import { MaterialModule } from './imports/material';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    ConfirmappointmentComponent
-  ],
+  declarations: [AppComponent, ConfirmappointmentComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    MaterialModule
+    MaterialModule,
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

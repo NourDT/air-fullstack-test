@@ -1,0 +1,21 @@
+
+<mat-card class="example-card">
+<mat-grid-list cols="3" rowHeight="1:2">
+    <mat-grid-tile>John Doe 
+        <div>30min</div>
+        <div>timezones</div>
+        
+        <div>Description</div>
+</mat-grid-tile>
+    <mat-grid-tile>
+        <mat-label>Choose a date</mat-label>
+<mat-calendar name="appointment_date" [minDate]="today" [dateFilter]="disableWeekend" [selected]="selectedDate" (selectedChange)="onSelect($event)"></mat-calendar>
+
+    </mat-grid-tile>
+    <mat-grid-tile>3</mat-grid-tile>
+  </mat-grid-list>
+
+</mat-card>
+   
+        
+

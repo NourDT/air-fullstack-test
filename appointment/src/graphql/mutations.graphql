@@ -1,0 +1,52 @@
+# this is an auto generated file. This will be overwritten
+mutation CreateAppointment(
+  $input: CreateAppointmentInput!
+  $condition: ModelAppointmentConditionInput
+) {
+  createAppointment(input: $input, condition: $condition) {
+    id
+    candidateId
+    eventName
+    timezone
+    date
+    startTime
+    endTime
+    duration
+    createdAt
+    updatedAt
+  }
+}
+mutation UpdateAppointment(
+  $input: UpdateAppointmentInput!
+  $condition: ModelAppointmentConditionInput
+) {
+  updateAppointment(input: $input, condition: $condition) {
+    id
+    candidateId
+    eventName
+    timezone
+    date
+    startTime
+    endTime
+    duration
+    createdAt
+    updatedAt
+  }
+}
+mutation DeleteAppointment(
+  $input: DeleteAppointmentInput!
+  $condition: ModelAppointmentConditionInput
+) {
+  deleteAppointment(input: $input, condition: $condition) {
+    id
+    candidateId
+    eventName
+    timezone
+    date
+    startTime
+    endTime
+    duration
+    createdAt
+    updatedAt
+  }
+}

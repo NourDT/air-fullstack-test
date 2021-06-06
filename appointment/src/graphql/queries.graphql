@@ -1,0 +1,36 @@
+# this is an auto generated file. This will be overwritten
+query GetAppointment($id: ID!) {
+  getAppointment(id: $id) {
+    id
+    candidateId
+    eventName
+    timezone
+    date
+    startTime
+    endTime
+    duration
+    createdAt
+    updatedAt
+  }
+}
+query ListAppointments(
+  $filter: ModelAppointmentFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listAppointments(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      candidateId
+      eventName
+      timezone
+      date
+      startTime
+      endTime
+      duration
+      createdAt
+      updatedAt
+    }
+    nextToken
+  }
+}

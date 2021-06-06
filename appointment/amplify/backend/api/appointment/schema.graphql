@@ -1,0 +1,13 @@
+type Appointment @model 
+  @key(name: "byDate", fields: [ "date"])
+  @key(name: "byCandidate", fields: [ "candidateId"]){
+  id: ID!
+  candidateId : String!
+  eventName: String!
+  timezone : String
+  date : AWSDate
+  startTime : AWSTime
+  endTime : AWSTime
+  duration :Int
+}
+

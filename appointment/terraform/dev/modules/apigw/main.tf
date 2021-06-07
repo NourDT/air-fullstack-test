@@ -9,14 +9,14 @@ resource "aws_api_gateway_rest_api" "api" {
 resource "aws_api_gateway_resource" "proxy" {
   rest_api_id = aws_api_gateway_rest_api.api.id
   parent_id   = aws_api_gateway_rest_api.api.root_resource_id
-  path_part   = "{proxy+}"
+  path_part   = "getAppt"
 }
 
 # Requests mapping
 resource "aws_api_gateway_method" "request_method" {
   rest_api_id   = aws_api_gateway_rest_api.api.id
   resource_id   = aws_api_gateway_resource.proxy.id
-  http_method   = var.method
+  http_method   = "POST"
   authorization = "NONE"
 }
 
@@ -53,7 +53,6 @@ resource "aws_api_gateway_method_response" "options_200" {
     "method.response.header.Access-Control-Allow-Origin"      = true
     "method.response.header.Access-Control-Allow-Headers"     = true
     "method.response.header.Access-Control-Allow-Methods"     = true
-    "method.response.header.Access-Control-Allow-Credentials" = true
   }
 
   depends_on = [aws_api_gateway_method.options_method]
@@ -65,8 +64,13 @@ resource "aws_api_gateway_integration" "options_integration" {
   http_method = aws_api_gateway_method.options_method.http_method
 
   type             = "MOCK"
-  content_handling = "CONVERT_TO_TEXT"
-
+  request_templates = {
+    "application/json" =  <<EOF
+  {
+    "statusCode":200    
+  }
+  EOF
+  }
   depends_on = [aws_api_gateway_method.options_method]
 }
 
@@ -78,8 +82,8 @@ resource "aws_api_gateway_integration_response" "options_integration_response" {
 
   response_parameters = {
     "method.response.header.Access-Control-Allow-Origin"  = "'*'"
-    "method.response.header.Access-Control-Allow-Headers" = "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'"
-    "method.response.header.Access-Control-Allow-Methods" = "'OPTIONS,DELETE,GET,HEAD,PATCH,POST,PUT'"
+    "method.response.header.Access-Control-Allow-Headers" = "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+    "method.response.header.Access-Control-Allow-Methods" = "'OPTIONS,POST'"
   }
 
   depends_on = [

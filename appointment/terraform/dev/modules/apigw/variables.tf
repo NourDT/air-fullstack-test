@@ -19,7 +19,7 @@ variable "minimum_compression_size" {
 
 variable "method" {
   description = "The HTTP method"
-  default     = "ANY"
+  default     = "POST"
 }
 
 variable "lambda_arn" {

@@ -1,0 +1,52 @@
+$bgcolor: lightblue;
+$textcolor: darkblue;
+$fontsize: 18px;
+
+body {
+  background-color: $bgcolor;
+  color: $textcolor;
+  font-size: $fontsize;
+}
+
+.container {
+  display: flex; /* or inline-flex */
+  flex-direction: row;
+  flex-flow: row wrap;
+  flex-wrap: nowrap;
+  max-height: 500px;
+  justify-content: center;
+  padding: 10px;
+  margin: 20px;
+  border: 1px solid gray;
+  border-radius: 14px;
+}
+
+.tile {
+  padding: 10px;
+  margin-top: 10px;
+  max-width: 300px;
+  div {
+    padding: 3px;
+  }
+  .description {
+    font-size: 1em;
+  }
+  .title {
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+}
+
+.btn-group {
+  padding: 10px;
+  cursor: pointer; /* Pointer/hand icon */
+  display: block; /* Make the buttons appear below each other */
+  overflow-x: hidden;
+  overflow-y: scroll;
+  height: 100%;
+}
+
+.btn {
+  width: 100%;
+  margin: 5px;
+}

@@ -1,22 +1,72 @@
-<mat-card class="example-card">
-  <mat-grid-list cols="3" rowHeight="1:2">
-    <mat-grid-tile
-      >John Doe
-      <div>30min</div>
-      <div>timezones</div>
+<div class="container">
+  <div class="tile">
+    <div>{{ userId }}</div>
+    <div class="title">
+      {{ eventName }}
+    </div>
+    <div style="vertical-align: auto">
+      <img
+        src="../../../assets/time-icon.webp"
+        style="height: 15px; width: 15px"
+      />
+      {{ duration }} minutes
+    </div>
+    <div>
+      <mat-form-field appearance="fill">
+        <mat-label>Select timezone</mat-label>
+        <mat-select [(value)]="timezone" required>
+          <mat-option
+            *ngFor="let timezone of availableTimezones"
+            [value]="timezone"
+          >
+            {{ timezone }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
 
-      <div>Description</div>
-    </mat-grid-tile>
-    <mat-grid-tile>
-      <mat-label>Choose a date</mat-label>
-      <mat-calendar
-        name="appointment_date"
-        [minDate]="today"
-        [dateFilter]="disableWeekend"
-        [selected]="selectedDate"
-        (selectedChange)="onSelect($event)"
-      ></mat-calendar>
-    </mat-grid-tile>
-    <mat-grid-tile>3</mat-grid-tile>
-  </mat-grid-list>
-</mat-card>
+    <div class="description">
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc nec
+      consectetur ipsum, eget pulvinar mauris. Sed ultrices porta tristique.
+      Phasellus eu nunc massa. Maecenas lorem dolor, tincidunt nec turpis nec,
+      scelerisque venenatis augue. Vivamus non nisi et augue scelerisque
+      pharetra. Maecenas sed iaculis est, ac ornare urna. Sed sodales ac enim at
+      rutrum.
+    </div>
+  </div>
+  <mat-divider [vertical]="true"></mat-divider>
+  <div class="tile">
+    Choose a date
+    <mat-calendar
+      name="appointment_date"
+      [minDate]="today"
+      [dateFilter]="disableWeekend"
+      [selected]="selectedDate"
+      (selectedChange)="onSelect($event)"
+    ></mat-calendar>
+  </div>
+  <mat-divider [vertical]="true"></mat-divider>
+  <div *ngIf="selectedDate" class="tile">
+    <div class="btn-group">
+      <button
+        class="btn"
+        *ngFor="let timeslot of availableTimeSlots"
+        (click)="bookSlot(timeslot)"
+        mat-stroked-button
+        color="primary"
+      >
+        {{ timeslot.startTime }} to {{ timeslot.endTime }}
+      </button>
+    </div>
+  </div>
+</div>
+
+<ng-template #apptDialog>
+  <h2 matDialogTitle>Appointment Booked!</h2>
+  <div>Date : {{ bookingresult.date }}</div>
+  <div>Time : {{ bookingresult.startTime }} to {{ bookingresult.endTime }}</div>
+  <div>See you soon!</div>
+  <mat-dialog-actions>
+    <button mat-button mat-dialog-close>Close</button>
+  </mat-dialog-actions>
+</ng-template>

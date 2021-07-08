@@ -68,7 +68,7 @@ Be prepared to talk about
 
 > Where should I send back the result when I'm done?
 
-Fork this repo and send us a pull request when you think you are done. **Deadline is next Tuesday, 8th of June.** 
+Fork this repo and send us a pull request when you think you are done. **Please make sure you adhere to the deadline mentioned in email/message sent to you along with this link** 
 
 > What if I have a question?
 

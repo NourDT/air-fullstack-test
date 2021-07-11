@@ -1,0 +1,23 @@
+.booking-card {
+  width: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+  margin: 5px;
+  text-transform: capitalize;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  h5 {
+    color: #999;
+  }
+  h3,
+  h4 {
+    color: #339dff;
+  }
+}
+
+@media screen and (max-width: 481px) {
+  .booking-card {
+    width: 100%;
+    box-sizing: border-box;
+  }
+}
+

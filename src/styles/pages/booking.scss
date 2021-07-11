@@ -1,0 +1,21 @@
+.booking-parent {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc( 100vh - 50px );
+  .booking {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 90%;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    padding: 20px;
+  }
+}
+@media screen and (max-width:1024px) {
+    .booking{
+        flex-wrap: wrap;
+        max-width: 90%;
+        padding: 0;
+    }
+}

@@ -1,0 +1,25 @@
+.btn-parent{
+  margin-top: 10px;
+  margin-bottom: 10px;
+
+}
+.button {
+  background: #339dff;
+  color: #fff;
+  text-decoration: none;
+  border: none;
+  font-size: 13px;
+  line-height: 38px;
+  border-radius: 50px;
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
+  width: 170px;
+  text-align: center;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  cursor: pointer;
+  &:hover {
+    background: #fff;
+    color: #339dff;
+    box-shadow: 0 4px 4px rgba(83, 100, 255, 0.32);
+  }
+}

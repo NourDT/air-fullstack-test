@@ -1,0 +1,32 @@
+.card {
+  width: 350px;
+  padding: 10px;
+  min-height: 430px;
+  box-sizing: border-box;
+  .heading {
+    .name {
+      margin-top: 0;
+    }
+    h2 {
+      text-transform: capitalize;
+    }
+    h4 {
+      color: #777;
+      text-transform: uppercase;
+    }
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .card {
+    min-height: 395px;
+  }
+  .date-selected-card {
+    border-bottom: 1px solid #999;
+  }
+}
+@media screen and (max-width: 777px) {
+  .show-selected-card {
+    border-bottom: 1px solid #999;
+  }
+}

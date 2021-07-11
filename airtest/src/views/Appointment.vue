@@ -1,6 +1,9 @@
 <template>
-  <v-container class="fill-height">
-   <v-card
+  <v-container class="fill-height flex-column">
+    <div class="my-5">
+      <router-link to="/">Get links</router-link>
+    </div>
+    <v-card
       class="mx-auto"
       max-width="1200"
     >
@@ -57,6 +60,10 @@
 <script>
   export default {
     name: 'Appointment',
+
+    created() {
+      if (!this.$route.query.id) this.$router.push({ name: 'Home' })
+    },
 
     data: () => ({
 

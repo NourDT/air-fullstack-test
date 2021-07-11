@@ -1,8 +1,28 @@
 <template>
-  <div>
-    <div class="text-center mt-5">
-      <router-link to="/appointments">Appointment</router-link>
+  <v-container>
+    <h1>Select a link below:</h1>
+    <div>
+      <template v-for="id in ids">
+        <p :key="id">
+          <router-link :to="`/appointments?id=${id}`">{{ `/appointments?id=${id}` }}</router-link>
+        </p>
+      </template>
     </div>
-    <h1>The links page</h1>
-  </div>
+  </v-container>
 </template>
+
+<script>
+import { v4 as uuidv4 } from 'uuid';
+
+export default {
+  name: 'Home',
+  data: () => ({
+    ids: []
+  }),
+  created() {
+    for (let i = 0; i < 3; i++) {
+      this.ids.push(uuidv4())
+    }
+  },
+}
+</script>

@@ -1,0 +1,93 @@
+# Welcome to Serverless!
+#
+# This file is the main config file for your service.
+# It's very minimal at this point and uses default values.
+# You can always add more config options for more control.
+# We've included some commented out config examples here.
+# Just uncomment any of them to get that config option.
+#
+# For full config options, check the docs:
+#    docs.serverless.com
+#
+# Happy Coding!
+
+service: booking-events
+# app and org for use with dashboard.serverless.com
+#app: your-app-name
+#org: your-org-name
+
+# You can pin your service to only deploy with a specific Serverless version
+# Check out our docs for more details
+frameworkVersion: '2'
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  lambdaHashingVersion: 20201221
+  region: us-east-1
+  environment:
+    TABLE: bookings
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:DeleteItem
+      Resource: "*"
+  apiKeys:
+    - free:
+        - authKey
+  usagePlan:
+    - free:
+        quota:
+          limit: 5000
+          offset: 2
+          period: MONTH
+        throttle:
+          burstLimit: 200
+          rateLimit: 100
+
+functions:
+  createEvent:
+    handler: handler.createEvent
+    events:
+      - http:
+          path: createEvent
+          method: post
+          cors: true
+          private: true
+  getEvents:
+    handler: handler.getAllEvents
+    events:
+      - http:
+          path: getAllEvents
+          method: get
+          cors: true
+          private: true
+  getEventByDate:
+    handler: handler.getEventByDate
+    events:
+      - http:
+          path: getEventByDate
+          method: get
+          cors: true
+          private: true
+
+# you can add CloudFormation resource templates here
+resources:
+  Resources:
+    DynamoDbTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.TABLE}
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1

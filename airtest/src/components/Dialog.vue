@@ -7,7 +7,7 @@
   >
     <v-card>
       <v-card-title>
-        Please confirm your appointment time:
+        {{ showThankYou ? 'Appointment confirmed' : 'Please confirm your appointment time:'}}
       </v-card-title>
 
       <v-card-text>

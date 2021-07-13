@@ -104,6 +104,7 @@ Placing the solution readme here.
 - Frontend
   - The available date has to be from today onwards. If the current time have passed 4pm, then the available date will start from tomorrow onwards.
   - Each time a date is selected, an API call will be triggered to retrieve the available timings of that date. If no timing is available, it will display "No available timings".
+  - Timings are formatted to follow `Asia/Kuala_Lumpur`.
   - For a smoother UX, loading indicators are used during API calls.
   - Confirmation and cancel buttons are disabled when user clicks on "Confirm" and the http request is still ongoing. The dialog will also be persisted during this time.
   - Currently, errors are handled with a simple `alert(error)` to show that something has gone wrong during API calls.
@@ -113,6 +114,7 @@ Placing the solution readme here.
   - The table consists of 2 fields, `date`(String) and `appointments`(List/Array). The `date` is used as the partition key, this is because we are only querying against `date` in this project and this would allow us to avoid using DynamoDB's scan or creating a GSI. We can quickly query appointments in a given date, which is only what this project needs. The `appointments` is a list containing objects/map with `id` and `time` field.
   - The `GET /appointments/{date}` endpoint allow us to retrieve appointments on a given date.
   - The `POST /appointments` endpoint allow us to create an appointment. The API expects the request body to have `date`, `time`, and `id`. It will check if the time is still available before creating.
+  - `time` field is saved as 24 hour time format for ease.
 
 # How to run the code:
 ### Frontend:

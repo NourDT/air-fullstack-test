@@ -20,6 +20,7 @@ export default {
     ids: []
   }),
   created() {
+    // Generate 3 random links
     for (let i = 0; i < 3; i++) {
       this.ids.push(uuidv4())
     }

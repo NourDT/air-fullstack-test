@@ -113,6 +113,7 @@ export default {
   }),
 
   created() {
+    // Redirect back to home page if no id is present
     this.id = this.$route.query.id
     if (!this.id) return this.$router.push({ name: 'Home' })
     this.buildDefaultTimes()
@@ -130,20 +131,24 @@ export default {
 
   methods: {
     buildDefaultTimes() {
+      // Builds a list of times
       const currentTime = moment(new Date()).tz(MALAYSIA_TZ).format('HH:mm').split(':')
       const currentHour = currentTime[0]
       const currentMinute = currentTime[1]
       this.availableTimes = []
       for (let i = currentHour; i < 17; i++) {
+        // Skip hours that are before 1pm
         if (i < 13) continue
         if (currentHour === i) {
+          // If it has not pass the 30 minute mark yet
           if (currentMinute < 30 && i > 13) this.availableTimes.push(`${currentHour}:30`)
         } else {
           this.availableTimes.push(`${i}:00`)
+          // Stop at 4pm
           if (i < 16) this.availableTimes.push(`${i}:30`)
         }
       }
-      // Only show times after current time
+      // If theres no available times for today, then start from tomorrow onwards
       if (!this.availableTimes.length) this.minDate = moment(new Date(), "yyyy-MM-D").tz(MALAYSIA_TZ).add(1, 'days').format('yyyy-MM-D');
     },
     getFormattedTime(time) {
@@ -160,7 +165,12 @@ export default {
       this.timeLoading = false
     },
     onDateSelected(date) {
-      this.availableTimes = defaultTimes;
+      // Set to default times if its not today's date, else check if time has already pass
+      if (moment(new Date(date)).tz(MALAYSIA_TZ).format('yyyy-MM-D') !== moment(new Date()).tz(MALAYSIA_TZ).format('yyyy-MM-D')) {
+        this.availableTimes = defaultTimes;
+      } else {
+        this.buildDefaultTimes()
+      }
       this.selectedDate = date
       this.getTimes(date)
     },
@@ -196,6 +206,7 @@ export default {
       }
     },
     closeDialog() {
+      // Persist dialog if http request still ongoing
       if (this.loading) return
       this.selectedTime = ''
       this.showThankYou = false

@@ -1,4 +1,4 @@
-# Full-stack Developer test
+# Full-stack Developer test (solution below)
 
 Make sure you read **all** of this document carefully, and follow the guidelines in it.
 
@@ -73,3 +73,65 @@ Fork this repo and send us a pull request when you think you are done. **Please 
 > What if I have a question?
 
 Email nour@airecruiter.com for any questions. 
+
+---
+# Solution
+Placing the solution readme here.
+
+## User Story:
+1. User clicks on a unique link in home page `/` and will be redirected to appointment booking page.
+2. User can select a date to trigger the display of a list of available times. User will only see timings that have not been booked.
+3. User can click on a time and a confirmation dialog will appear asking the user to confirm appointment.
+4. The dialog text will change to "Thank you" when user clicks on the "Confirm" button. User can also click on "Back to links" to go back to the links page.
+5. The dialog will close if user clicks on "Cancel".
+
+## Assumptions:
+1. Available appointment times are everyday, 1:00pm to 4:00pm.
+2. Allow user to select appointments in present or future year/month.
+3. Allow user to select another appointment after confirming the current one.
+
+## Tech Stack:
+- Frontend
+  - [VueJS](https://vuejs.org/), [Vuetify](https://vuetifyjs.com/en/), [MomentJS](https://momentjs.com/)
+  - Given the time constraint for the project, I decided to go with Vue and Vuetify as I'm more familiar with it and can code faster in it.
+
+- Backend
+  - AWS API Gateway, Lambda (Nodejs14.x), DynamoDB
+  - I decided to use DynamoDB as storage because its a no-SQL db and can be configured quickly given the time constraint.
+  - Deployed with AWS SAM
+
+## Design:
+- Frontend
+  - The available date has to be from today onwards. If the current time have passed 4pm, then the available date will start from tomorrow onwards.
+  - Each time a date is selected, an API call will be triggered to retrieve the available timings of that date. If no timing is available, it will display "No available timings".
+  - For a smoother UX, loading indicators are used during API calls.
+  - Confirmation and cancel buttons are disabled when user clicks on "Confirm" and the http request is still ongoing. The dialog will also be persisted during this time.
+  - Currently, errors are handled with a simple `alert(error)` to show that something has gone wrong during API calls.
+
+- Backend
+  - API Gateway => Lambda function => DynamoDB
+  - The table consists of 2 fields, `date`(String) and `appointments`(List/Array). The `date` is used as the partition key, this is because we are only querying against `date` in this project and this would allow us to avoid using DynamoDB's scan or creating a GSI. We can quickly query appointments in a given date, which is only what this project needs. The `appointments` is a list containing objects/map with `id` and `time` field.
+  - The `GET /appointments/{date}` endpoint allow us to retrieve appointments on a given date.
+  - The `POST /appointments` endpoint allow us to create an appointment. The API expects the request body to have `date`, `time`, and `id`. It will check if the time is still available before creating.
+
+# How to run the code:
+### Frontend:
+
+```
+cd airtest && yarn install && yarn serve
+```
+
+### Backend:
+
+Make sure you have a configured AWS account and AWS SAM CLI installed.
+```
+sam deploy --guided
+```
+Log in to your API Gateway to copy the url and paste it in `/services/appointments.js`.
+
+# Potential Improvements:
+
+- Check to see if time has passed during creation of appointment.
+- Move all frontend business logic to backend.
+- Disable dates that are fully booked.
+- Use env variable for table name.

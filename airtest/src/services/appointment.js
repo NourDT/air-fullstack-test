@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const baseUrl = 'https://k6bo06qwn2.execute-api.ap-southeast-1.amazonaws.com/appointments'
+const baseUrl = 'https://8byyi37vof.execute-api.ap-southeast-1.amazonaws.com/appointments'
 
 export const getAppointments = async (date) => axios.get(`${baseUrl}/${date}`)
 

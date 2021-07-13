@@ -1,0 +1,80 @@
+# This is the SAM template that represents the architecture of your serverless application
+# https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-template-basics.html
+
+# The AWSTemplateFormatVersion identifies the capabilities of the template
+# https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/format-version-structure.html
+AWSTemplateFormatVersion: 2010-09-09
+Description: >-
+  lambda-services
+
+# Transform section specifies one or more macros that AWS CloudFormation uses to process your template
+# https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/transform-section-structure.html
+Transform:
+- AWS::Serverless-2016-10-31
+
+# Resources declares the AWS resources that you want to include in the stack
+# https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/resources-section-structure.html
+Resources:
+  
+  AppointmentsTable:
+    Type: AWS::Serverless::SimpleTable
+    Properties:
+      TableName: appointments
+      PrimaryKey:
+        Name: date
+        Type: String
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+
+  AppointmentsHttpApi:
+    Type: AWS::Serverless::HttpApi
+    Properties:
+      CorsConfiguration:
+        AllowMethods:
+          - GET
+          - POST
+          - OPTIONS
+        AllowOrigins:
+          - '*'
+        AllowHeaders:
+          - 'Content-Type'
+          - 'Access-Control-Allow-Origin'
+    
+  GetAppointmentsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src/handlers/getAppointments.handler
+      Runtime: nodejs14.x
+      Description: 'Get appointments on a given date'
+      MemorySize: 128
+      Timeout: 5
+      Events:
+        GetAppointments:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref AppointmentsHttpApi
+            Method: GET
+            Path: /appointments/{date}
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref AppointmentsTable      
+  
+  CreateAppointmentFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src/handlers/createAppointment.handler
+      Runtime: nodejs14.x
+      Description: 'Create an appointment'
+      MemorySize: 128
+      Timeout: 5
+      Events:
+        CreateAppointment:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref AppointmentsHttpApi
+            Method: POST
+            Path: /appointments
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref AppointmentsTable

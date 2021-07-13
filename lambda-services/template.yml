@@ -30,12 +30,21 @@ Resources:
   AppointmentsHttpApi:
     Type: AWS::Serverless::HttpApi
     Properties:
-      CorsConfiguration: True
+      CorsConfiguration:
+        AllowMethods:
+          - GET
+          - POST
+          - OPTIONS
+        AllowOrigins:
+          - '*'
+        AllowHeaders:
+          - 'Content-Type'
+          - 'Access-Control-Allow-Origin'
     
   GetAppointmentsFunction:
     Type: AWS::Serverless::Function
     Properties:
-      Handler: src/handlers/getAppointmets.handler
+      Handler: src/handlers/getAppointments.handler
       Runtime: nodejs14.x
       Description: 'Get appointments on a given date'
       MemorySize: 128

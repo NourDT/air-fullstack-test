@@ -111,10 +111,9 @@ Placing the solution readme here.
 
 - Backend
   - API Gateway => Lambda function => DynamoDB
-  - The table consists of 2 fields, `date`(String) and `appointments`(List/Array). The `date` is used as the partition key, this is because we are only querying against `date` in this project and this would allow us to avoid using DynamoDB's scan or creating a GSI. We can quickly query appointments in a given date, which is only what this project needs. The `appointments` is a list containing objects/map with `id` and `time` field.
+  - The table consists of 2 fields, `date`(String) and `appointments`(List/Array). The `date` is used as the partition key, this is because we are only querying against `date` in this project and this would allow us to avoid using DynamoDB's scan or creating a GSI. We can quickly query appointments in a given date, which is only what this project needs. The `appointments` is a list containing objects/map with `id` and `time` field. `time` field is saved as 24 hour time format for ease.
   - The `GET /appointments/{date}` endpoint allow us to retrieve appointments on a given date.
   - The `POST /appointments` endpoint allow us to create an appointment. The API expects the request body to have `date`, `time`, and `id`. It will check if the time is still available before creating.
-  - `time` field is saved as 24 hour time format for ease.
 
 # How to run the code:
 ### Frontend:
@@ -125,6 +124,9 @@ cd airtest && yarn install && yarn serve
 
 ### Backend:
 
+```
+cd lambda-services
+```
 Make sure you have a configured AWS account and AWS SAM CLI installed.
 ```
 sam deploy --guided

@@ -138,4 +138,5 @@ Log in to your API Gateway to copy the url and paste it in `/services/appointmen
 - Check to see if time has passed during creation of appointment.
 - Move all frontend business logic to backend.
 - Disable dates that are fully booked.
-- Use env variable for table name.
+- Use env variables.
+- Use Api keys for endpoints.

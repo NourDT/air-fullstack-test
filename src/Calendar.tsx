@@ -5,7 +5,15 @@ import React from "react";
  *
  * The month is zero-indexed. E.g. January is 0, February is 1 and so on.
  */
-const DatePicker = ({ month, year, onClick }) => {
+const DatePicker = ({
+  month,
+  year,
+  onClick,
+}: {
+  month: number;
+  year: number;
+  onClick: () => void | null;
+}) => {
   // 0 (Sun) - 6 (Sat)
   const startDay = new Date(year, month, 1).getDay();
   // Setting day argument to 0 get the date from 1 day before
@@ -43,7 +51,14 @@ const DatePicker = ({ month, year, onClick }) => {
   );
 };
 
-export class Calendar extends React.Component {
+export class Calendar extends React.Component<
+  {},
+  {
+    month: number;
+    year: number;
+    min: string;
+  }
+> {
   constructor(props) {
     super(props);
 
@@ -69,7 +84,11 @@ export class Calendar extends React.Component {
           min={this.state.min}
           onChange={(event) => this.handleChange(event)}
         />
-        <DatePicker month={this.state.month} year={this.state.year} />
+        <DatePicker
+          month={this.state.month}
+          year={this.state.year}
+          onClick={null}
+        />
       </>
     );
   }

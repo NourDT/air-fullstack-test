@@ -1,9 +1,17 @@
-import React from "react";
-
-export const Description = (props) => (
-  <>
-    <h2 className={"text-lg font-semibold"}>{props.name}</h2>
-    <h1 className={"font-bold text-2xl"}>{props.eventTitle}</h1>
+export const Description = ({
+  name,
+  eventTitle,
+  duration,
+  eventDescription,
+}: {
+  name: string;
+  eventTitle: string;
+  duration: number;
+  eventDescription: string;
+}) => (
+  <div>
+    <h2 className={"text-lg font-semibold"}>{name}</h2>
+    <h1 className={"font-bold text-2xl"}>{eventTitle}</h1>
 
     <div>
       <svg
@@ -21,7 +29,7 @@ export const Description = (props) => (
         />
       </svg>
       <p className={"inline text-gray-600 align-middle px-1 py-2"}>
-        {props.duration}
+        {duration}
       </p>
     </div>
 
@@ -48,6 +56,6 @@ export const Description = (props) => (
       </select>
     </div>
 
-    <p className={"text-base text-gray-700"}>{props.eventDescription}</p>
-  </>
+    <p className={"text-base text-gray-700"}>{eventDescription}</p>
+  </div>
 );

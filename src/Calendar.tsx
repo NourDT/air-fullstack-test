@@ -65,7 +65,7 @@ export class Calendar extends React.Component<
 
   render() {
     return (
-      <>
+      <div>
         <div>
           <input
             type="month"
@@ -112,7 +112,7 @@ export class Calendar extends React.Component<
           </button>
         </div>
         <DatePicker month={this.state.month} year={this.state.year} />
-      </>
+      </div>
     );
   }
 

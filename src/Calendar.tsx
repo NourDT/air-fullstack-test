@@ -5,15 +5,7 @@ import React from "react";
  *
  * The month is zero-indexed. E.g. January is 0, February is 1 and so on.
  */
-const DatePicker = ({
-  month,
-  year,
-  onClick,
-}: {
-  month: number;
-  year: number;
-  onClick: () => void | null;
-}) => {
+const DatePicker = ({ month, year }: { month: number; year: number }) => {
   // 0 (Sun) - 6 (Sat)
   const startDay = new Date(year, month, 1).getDay();
   // Setting day argument to 0 get the date from 1 day before
@@ -37,7 +29,6 @@ const DatePicker = ({
           return (
             <button
               key={`item-${index}`}
-              onClick={onClick}
               className="border w-6 h-6 rounded-full flex items-center justify-center p-4"
             >
               {elem}
@@ -59,7 +50,7 @@ export class Calendar extends React.Component<
     min: string;
   }
 > {
-  constructor(props) {
+  constructor(props: {}) {
     super(props);
 
     const currDate = new Date();
@@ -75,25 +66,80 @@ export class Calendar extends React.Component<
   render() {
     return (
       <>
-        <input
-          type="month"
-          value={`${this.state.year}-${String(this.state.month + 1).padStart(
-            2,
-            "0"
-          )}`}
-          min={this.state.min}
-          onChange={(event) => this.handleChange(event)}
-        />
-        <DatePicker
-          month={this.state.month}
-          year={this.state.year}
-          onClick={null}
-        />
+        <div>
+          <input
+            type="month"
+            value={`${this.state.year}-${String(this.state.month + 1).padStart(
+              2,
+              "0"
+            )}`}
+            min={this.state.min}
+            onChange={(event) => this.handleChange(event)}
+          />
+          {/* Left arrow */}
+          <button onClick={() => this.handleClick(false)}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M15 19l-7-7 7-7"
+              />
+            </svg>
+          </button>
+          {/* Right arrow */}
+          <button onClick={() => this.handleClick(true)}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M9 5l7 7-7 7"
+              />
+            </svg>
+          </button>
+        </div>
+        <DatePicker month={this.state.month} year={this.state.year} />
       </>
     );
   }
 
-  handleChange(event) {
+  handleClick(advance: boolean) {
+    this.setState((state, _) => {
+      let newMonth = state.month + (advance ? 1 : -1);
+      let newYear = state.year;
+
+      // FIXME Pretty ugly, but it works
+      if (newMonth === 12) {
+        // Advancing a year
+        newMonth -= 12;
+        newYear++;
+      } else if (newMonth < 0) {
+        // Reversing a year
+        newMonth = 11;
+        newYear--;
+      }
+
+      return {
+        month: newMonth,
+        year: newYear,
+      };
+    });
+  }
+
+  handleChange(event: React.ChangeEvent<HTMLInputElement>) {
     const value = new Date(event.target.value);
     this.setState({
       month: value.getUTCMonth(),

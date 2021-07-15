@@ -6,7 +6,7 @@
  * @param durationMinutes Event duration.
  * @returns A list of timeslots.
  */
-const freeSlots = (
+export const freeSlots = (
   bookings: { startTime: Date; endTime: Date }[],
   start: Date,
   end: Date,

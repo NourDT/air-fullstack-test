@@ -1,86 +1,118 @@
+import dayjs from "dayjs";
 import React from "react";
 
-/**
- * Date picker component.
- *
- * The month is zero-indexed. E.g. January is 0, February is 1 and so on.
- */
-const DatePicker = ({ month, year }: { month: number; year: number }) => {
-  // 0 (Sun) - 6 (Sat)
-  const startDay = new Date(year, month, 1).getDay();
-  // Setting day argument to 0 get the date from 1 day before
-  const daysInMonth = new Date(year, month + 1, 0).getDate();
+type DatePickerProp = {
+  /**
+   * Month to render.
+   *
+   * ```
+   * dayjs().month(6).startOf("month")
+   * ```
+   */
+  renderDate: dayjs.Dayjs;
 
-  // Pad the front of the array to get first day in the correct column
-  const days = Array.prototype.concat(
-    Array(startDay).fill(null),
-    Array(daysInMonth)
-      .fill(0)
-      .map((_, index) => index + 1)
-  );
-
-  return (
-    <div className="grid grid-cols-7 gap-4">
-      {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((value) => (
-        <p key={`day-${value}`}>{value}</p>
-      ))}
-      {days.map((elem, index) => {
-        if (elem) {
-          return (
-            <button
-              key={`item-${index}`}
-              className="border w-6 h-6 rounded-full flex items-center justify-center p-4"
-            >
-              {elem}
-            </button>
-          );
-        } else {
-          return <span key={`item-${index}`}></span>;
-        }
-      })}
-    </div>
-  );
+  /**
+   * Current date. Used to render disabled state.
+   *
+   * ```
+   * dayjs()
+   * ```
+   */
+  currDate: dayjs.Dayjs;
 };
 
-export class Calendar extends React.Component<
-  {},
-  {
-    month: number;
-    year: number;
-    min: string;
-  }
-> {
-  constructor(props: {}) {
+/**
+ * Date picker.
+ *
+ * ```
+ * <DatePicker renderDate={dayjs().month(6).startOf("month")} currDate={dayjs()} />
+ * ```
+ */
+const DatePicker = ({ renderDate, currDate }: DatePickerProp) => (
+  <div className="grid grid-cols-7 gap-4 mx-auto place-items-center">
+    {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((value) => (
+      <p key={`day-${value}`} className="uppercase font-medium pt-4">
+        {value}
+      </p>
+    ))}
+
+    {Array(renderDate.day())
+      .fill(null)
+      .map((_, index) => (
+        <span key={`blank-${index}`} />
+      ))}
+
+    {Array(renderDate.daysInMonth())
+      .fill(null)
+      .map((_, index) => renderDate.date(index + 1))
+      .map((elem) => {
+        const disabled = elem <= currDate;
+        return (
+          <button
+            key={elem.toString()}
+            className={`w-6 h-6 rounded-full flex items-center justify-center p-4 ${
+              disabled ? "" : "border-2 hover:bg-blue-400 hover:text-gray-100"
+            }`}
+            disabled={disabled}
+          >
+            {elem.date()}
+          </button>
+        );
+      })}
+  </div>
+);
+
+type CalendarProps = {
+  /**
+   * Current date.
+   */
+  currDate: dayjs.Dayjs;
+};
+
+type CalendarState = {
+  /**
+   * Selected date.
+   */
+  selectedDate: dayjs.Dayjs;
+};
+
+/**
+ * Calendar component.
+ *
+ * ```
+ * <Calendar currDate={dayjs()} />
+ * ```
+ */
+export class Calendar extends React.Component<CalendarProps, CalendarState> {
+  constructor(props: CalendarProps) {
     super(props);
 
-    const currDate = new Date();
     this.state = {
-      month: currDate.getUTCMonth(),
-      year: currDate.getUTCFullYear(),
-      min: `${currDate.getUTCFullYear()}-${String(
-        currDate.getMonth() + 1
-      ).padStart(2, "0")}`,
+      selectedDate: props.currDate.startOf("month"),
     };
   }
 
   render() {
     return (
       <div>
-        <div>
+        <div className="flex flex-row">
           <input
             type="month"
-            value={`${this.state.year}-${String(this.state.month + 1).padStart(
-              2,
-              "0"
-            )}`}
-            min={this.state.min}
-            onChange={(event) => this.handleChange(event)}
+            value={this.state.selectedDate.format("YYYY-MM")}
+            min={this.props.currDate.format("YYYY-MM")}
+            onChange={(e) => this.handleMonthChange(e)}
           />
+          <span className="flex-grow" />
           {/* Left arrow */}
-          <button onClick={() => this.handleClick(false)}>
+          <button
+            onClick={() => this.handleButton(false)}
+            hidden={this.state.selectedDate.isSame(
+              this.props.currDate.startOf("month")
+            )}
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6"
+              className="h-6 w-6 disabled:opacity-25"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -94,7 +126,7 @@ export class Calendar extends React.Component<
             </svg>
           </button>
           {/* Right arrow */}
-          <button onClick={() => this.handleClick(true)}>
+          <button onClick={() => this.handleButton(true)}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-6 w-6"
@@ -111,39 +143,30 @@ export class Calendar extends React.Component<
             </svg>
           </button>
         </div>
-        <DatePicker month={this.state.month} year={this.state.year} />
+        <DatePicker
+          renderDate={this.state.selectedDate}
+          currDate={this.props.currDate}
+        />
       </div>
     );
   }
 
-  handleClick(advance: boolean) {
-    this.setState((state, _) => {
-      let newMonth = state.month + (advance ? 1 : -1);
-      let newYear = state.year;
-
-      // FIXME Pretty ugly, but it works
-      if (newMonth === 12) {
-        // Advancing a year
-        newMonth -= 12;
-        newYear++;
-      } else if (newMonth < 0) {
-        // Reversing a year
-        newMonth = 11;
-        newYear--;
-      }
-
-      return {
-        month: newMonth,
-        year: newYear,
-      };
-    });
+  handleMonthChange(event: React.ChangeEvent<HTMLInputElement>) {
+    const newDate = dayjs(event.target.value, "YYYY-MM");
+    this.setState({ selectedDate: newDate });
   }
 
-  handleChange(event: React.ChangeEvent<HTMLInputElement>) {
-    const value = new Date(event.target.value);
-    this.setState({
-      month: value.getUTCMonth(),
-      year: value.getUTCFullYear(),
+  handleButton(advance: boolean) {
+    this.setState((state, props) => {
+      const currDate = props.currDate;
+      const newDate = advance
+        ? state.selectedDate.add(1, "month")
+        : state.selectedDate.subtract(1, "month");
+      return {
+        selectedDate: newDate.isBefore(currDate.startOf("month"))
+          ? currDate.startOf("month")
+          : newDate,
+      };
     });
   }
 }

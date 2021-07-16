@@ -1,3 +1,8 @@
+type BookingSlot = {
+  startTime: Date;
+  endTime: Date;
+};
+
 /**
  * Get free timeslots.
  * @param bookings Sorted array of bookings
@@ -7,32 +12,35 @@
  * @returns A list of timeslots.
  */
 export const freeSlots = (
-  bookings: { startTime: Date; endTime: Date }[],
+  bookings: BookingSlot[],
   start: Date,
   end: Date,
   durationMinutes: number
-): Date[] => {
-  const slots = [];
+) => {
+  const overlaps = (first: BookingSlot) => (second: BookingSlot) =>
+    !(first.endTime <= second.startTime || first.startTime >= second.endTime);
+  const not =
+    <T>(f: (x: T) => boolean) =>
+    (x: T) =>
+      !f(x);
+  return generateSlots(start, end, durationMinutes).filter((slot) =>
+    bookings.every(not(overlaps(slot)))
+  );
+};
 
-  // Push timeslots with no overlap
-  let bookingsIndex = 0;
-  let date = start;
-  for (; date < end && bookingsIndex < bookings.length; ) {
-    if (date < bookings[bookingsIndex].startTime) {
-      // Not overlapping with any bookings
-      slots.push(new Date(date));
-    } else if (date >= bookings[bookingsIndex].endTime) {
-      // Overshot the current booking
-      bookingsIndex++;
-      continue;
-    }
-    date.setMinutes(date.getMinutes() + durationMinutes);
-  }
-
-  // Push remaining timeslots
-  for (; date < end; date.setMinutes(date.getMinutes() + durationMinutes)) {
-    slots.push(new Date(date));
-  }
-
-  return slots;
+/**
+ * Generate a list of booking slots at regular intervals.
+ * @param start Start time.
+ * @param end End time.
+ * @param durationMinutes Event duration.
+ * @returns A list of timeslots.
+ */
+const generateSlots = (start: Date, end: Date, durationMinutes: number) => {
+  const durationMilli = durationMinutes * 6e4;
+  return Array((end.getTime() - start.getTime()) / durationMilli)
+    .fill(null)
+    .map((_, index) => ({
+      startTime: new Date(start.getTime() + index * durationMilli),
+      endTime: new Date(start.getTime() + (index + 1) * durationMilli),
+    }));
 };

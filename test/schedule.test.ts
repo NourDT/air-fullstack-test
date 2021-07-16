@@ -1,4 +1,4 @@
-const { freeSlots } = require("../prisma/schedule");
+import { freeSlots } from "../prisma/schedule";
 
 describe("Schedule module", () => {
   it("should return an empty array for no free slots", () => {
@@ -18,8 +18,8 @@ describe("Schedule module", () => {
     const end = new Date(2021, 1, 1, 10);
     const minutes = 60;
     expect(freeSlots(bookings, start, end, minutes)).toEqual([
-      new Date(2021, 1, 1, 8),
-      new Date(2021, 1, 1, 9),
+      { startTime: new Date(2021, 1, 1, 8), endTime: new Date(2021, 1, 1, 9) },
+      { startTime: new Date(2021, 1, 1, 9), endTime: new Date(2021, 1, 1, 10) },
     ]);
   });
 
@@ -29,9 +29,16 @@ describe("Schedule module", () => {
     ];
     const start = new Date(2021, 1, 1, 8);
     const end = new Date(2021, 1, 1, 10);
-    const minutes = 60;
+    const minutes = 30;
     expect(freeSlots(bookings, start, end, minutes)).toEqual([
-      new Date(2021, 1, 1, 9),
+      {
+        startTime: new Date(2021, 1, 1, 9),
+        endTime: new Date(2021, 1, 1, 9, 30),
+      },
+      {
+        startTime: new Date(2021, 1, 1, 9, 30),
+        endTime: new Date(2021, 1, 1, 10),
+      },
     ]);
   });
 
@@ -43,8 +50,8 @@ describe("Schedule module", () => {
     const end = new Date(2021, 1, 1, 10);
     const minutes = 60;
     expect(freeSlots(bookings, start, end, minutes)).toEqual([
-      new Date(2021, 1, 1, 8),
-      new Date(2021, 1, 1, 9),
+      { startTime: new Date(2021, 1, 1, 8), endTime: new Date(2021, 1, 1, 9) },
+      { startTime: new Date(2021, 1, 1, 9), endTime: new Date(2021, 1, 1, 10) },
     ]);
   });
 });

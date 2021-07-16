@@ -46,7 +46,7 @@ const DatePicker = ({ renderDate, currDate }: DatePickerProp) => (
       .fill(null)
       .map((_, index) => renderDate.date(index + 1))
       .map((elem) => {
-        const disabled = elem <= currDate;
+        const disabled = elem.isBefore(currDate, "day");
         return (
           <button
             key={elem.toString()}

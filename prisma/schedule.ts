@@ -16,17 +16,30 @@ export const freeSlots = (
   start: Date,
   end: Date,
   durationMinutes: number
-) => {
-  const overlaps = (first: BookingSlot) => (second: BookingSlot) =>
-    !(first.endTime <= second.startTime || first.startTime >= second.endTime);
-  const not =
-    <T>(f: (x: T) => boolean) =>
-    (x: T) =>
-      !f(x);
-  return generateSlots(start, end, durationMinutes).filter((slot) =>
+) =>
+  generateSlots(start, end, durationMinutes).filter((slot) =>
     bookings.every(not(overlaps(slot)))
   );
-};
+
+/**
+ * Return true if the two booking slots overlap.
+ * @param first First booking slot.
+ * @param second Second booking slot.
+ * @returns A boolean.
+ */
+const overlaps = (first: BookingSlot) => (second: BookingSlot) =>
+  !(first.endTime <= second.startTime || first.startTime >= second.endTime);
+
+/**
+ * Negate a unary predicate function.
+ * @param f A unary predicate function.
+ * @param x An item.
+ * @returns A boolean.
+ */
+const not =
+  <T>(f: (x: T) => boolean) =>
+  (x: T) =>
+    !f(x);
 
 /**
  * Generate a list of booking slots at regular intervals.

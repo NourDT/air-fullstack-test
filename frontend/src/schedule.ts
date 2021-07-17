@@ -1,6 +1,13 @@
-type BookingSlot = {
-  startTime: Date;
-  endTime: Date;
+import dayjs from "dayjs";
+import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
+import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
+
+dayjs.extend(isSameOrBefore);
+dayjs.extend(isSameOrAfter);
+
+export type BookingSlot = {
+  startTime: dayjs.Dayjs;
+  endTime: dayjs.Dayjs;
 };
 
 /**
@@ -13,8 +20,8 @@ type BookingSlot = {
  */
 export const freeSlots = (
   bookings: BookingSlot[],
-  start: Date,
-  end: Date,
+  start: dayjs.Dayjs,
+  end: dayjs.Dayjs,
   durationMinutes: number
 ) =>
   generateSlots(start, end, durationMinutes)
@@ -28,7 +35,10 @@ export const freeSlots = (
  * @returns A boolean.
  */
 const overlaps = (first: BookingSlot) => (second: BookingSlot) =>
-  !(first.endTime <= second.startTime || first.startTime >= second.endTime);
+  !(
+    first.startTime.isSameOrBefore(second.startTime) ||
+    first.startTime.isSameOrAfter(second.endTime)
+  );
 
 /**
  * Negate a unary predicate function.
@@ -48,12 +58,16 @@ const not =
  * @param durationMinutes Event duration.
  * @returns A list of timeslots.
  */
-const generateSlots = (start: Date, end: Date, durationMinutes: number) => {
+const generateSlots = (
+  start: dayjs.Dayjs,
+  end: dayjs.Dayjs,
+  durationMinutes: number
+) => {
   const durationMilli = durationMinutes * 6e4;
-  return Array((end.getTime() - start.getTime()) / durationMilli)
+  return Array((end.valueOf() - start.valueOf()) / durationMilli)
     .fill(null)
     .map((_, index) => ({
-      startTime: new Date(start.getTime() + index * durationMilli),
-      endTime: new Date(start.getTime() + (index + 1) * durationMilli),
+      startTime: dayjs(start).add(index * durationMilli, "millisecond"),
+      endTime: dayjs(start).add((index + 1) * durationMilli, "millisecond"),
     }));
 };

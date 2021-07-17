@@ -3,9 +3,12 @@ import React from "react";
 import { Calendar } from "./Calendar";
 import { Description } from "./Description";
 import { TimeslotPicker } from "./TimeslotPicker";
+import { freeSlots } from "./schedule";
+import { Prisma } from "@prisma/client";
 
 type AppState = {
   selectedDate: dayjs.Dayjs;
+  slots: dayjs.Dayjs[];
 };
 
 export class App extends React.Component<{}, AppState> {
@@ -14,7 +17,12 @@ export class App extends React.Component<{}, AppState> {
 
     this.state = {
       selectedDate: dayjs(),
+      slots: [],
     };
+  }
+
+  componentDidMount() {
+    this.fetchBookedSlots();
   }
 
   render() {
@@ -38,7 +46,10 @@ export class App extends React.Component<{}, AppState> {
           />
         </div>
         <div className="px-4 w-1/3">
-          <TimeslotPicker date={this.state.selectedDate} />
+          <TimeslotPicker
+            date={this.state.selectedDate}
+            slots={this.state.slots}
+          />
         </div>
       </div>
     );
@@ -46,5 +57,49 @@ export class App extends React.Component<{}, AppState> {
 
   handleDateSelect(date: dayjs.Dayjs) {
     this.setState({ selectedDate: date });
+    this.fetchBookedSlots();
+  }
+
+  fetchBookedSlots() {
+    const whereInput: Prisma.EventWhereInput = {
+      AND: [
+        {
+          startTime: {
+            lte: new Date(this.state.selectedDate.startOf("day").valueOf()),
+          },
+        },
+        {
+          endTime: {
+            lte: new Date(this.state.selectedDate.endOf("day").valueOf()),
+          },
+        },
+      ],
+    };
+
+    fetch(
+      `https://z89htl1u4d.execute-api.ap-southeast-1.amazonaws.com/dev/events`,
+      {
+        method: "POST",
+        body: JSON.stringify({
+          where: whereInput,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        redirect: "follow",
+      }
+    )
+      .then((response) => response.json())
+      .then((parsed) =>
+        this.setState((state) => ({
+          slots: freeSlots(
+            parsed,
+            state.selectedDate.hour(8).minute(0),
+            state.selectedDate.hour(16).minute(0),
+            30
+          ),
+        }))
+      )
+      .catch((e) => console.error(e));
   }
 }

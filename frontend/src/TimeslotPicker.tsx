@@ -61,7 +61,7 @@ export class TimeslotPicker extends React.Component<
         <h2 className="text-lg">
           {this.props.date.format("dddd D MMMM YYYY")}
         </h2>
-        <div>
+        <div className="h-96 overflow-y-auto">
           {freeSlots(
             this.state.slots,
             this.props.date.hour(8).minute(0),

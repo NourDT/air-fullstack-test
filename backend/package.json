@@ -1,0 +1,22 @@
+{
+  "name": "air-fullstack-aws",
+  "version": "1.0.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nchengyeeshen/air-fullstack-test.git"
+  },
+  "keywords": [],
+  "author": "Nicholas Cheng",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nchengyeeshen/air-fullstack-test/issues"
+  },
+  "homepage": "https://github.com/nchengyeeshen/air-fullstack-test#readme",
+  "devDependencies": {
+    "prisma": "^2.27.0",
+    "serverless-dotenv-plugin": "^3.9.0"
+  },
+  "dependencies": {
+    "@prisma/client": "^2.27.0"
+  }
+}

@@ -1,0 +1,56 @@
+service: air-fullstack-aws
+plugins:
+  - serverless-dotenv-plugin
+
+provider:
+  name: aws
+  region: ap-southeast-1
+  runtime: nodejs14.x
+
+functions:
+  createUser:
+    handler: handlers.createUserHandler
+    events:
+      - http:
+          method: POST
+          path: /users
+  getUser:
+    handler: handlers.getUserHandler
+    events:
+      - http:
+          method: POST
+          path: /user
+  getUsers:
+    handler: handlers.getUsersHandler
+    events:
+      - http:
+          method: GET
+          path: /users
+  createEvent:
+    handler: handlers.createEventHandler
+    events:
+      - http:
+          method: POST
+          path: /events
+  getEvent:
+    handler: handlers.getEventHandler
+    events:
+      - http:
+          method: POST
+          path: /event
+  getEvents:
+    handler: handlers.getEventsHandler
+    events:
+      - http:
+          method: GET
+          path: /events
+
+# Took me awhile to figure this out cause it kept going over the AWS size
+# limit... Turns out you gotta exclude a lot of stuff to stay under the size
+# limit.
+# https://www.prisma.io/docs/guides/deployment/deployment-guides/caveats-when-deploying-to-aws-platforms#aws-lambda-upload-limit
+package:
+  patterns:
+    - "!node_modules/@prisma/engines"
+    - "!node_modules/.prisma/client/query-engine-*"
+    - "node_modules/.prisma/client/query-engine-rhel-*"

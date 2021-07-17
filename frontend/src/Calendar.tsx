@@ -1,3 +1,4 @@
+import { render } from "@testing-library/react";
 import dayjs from "dayjs";
 import React from "react";
 
@@ -21,6 +22,11 @@ type DatePickerProp = {
   currDate: dayjs.Dayjs;
 
   /**
+   * Selected date.
+   */
+  selectedDate: dayjs.Dayjs;
+
+  /**
    * Date select callback function.
    */
   handleDateSelect: (date: dayjs.Dayjs) => void;
@@ -36,6 +42,7 @@ type DatePickerProp = {
 const DatePicker = ({
   renderDate,
   currDate,
+  selectedDate,
   handleDateSelect,
 }: DatePickerProp) => (
   <div className="grid grid-cols-7 gap-4 mx-auto place-items-center">
@@ -60,7 +67,11 @@ const DatePicker = ({
           <button
             key={elem.toString()}
             className={`w-6 h-6 rounded-full flex items-center justify-center p-4 ${
-              disabled ? "" : "border-2 hover:bg-blue-400 hover:text-gray-100"
+              disabled
+                ? ""
+                : elem.isSame(selectedDate, "date")
+                ? "border-2 bg-red-400 text-gray-100"
+                : "border-2 hover:bg-blue-400 hover:text-gray-100"
             }`}
             disabled={disabled}
             onClick={() => handleDateSelect(elem)}
@@ -77,6 +88,11 @@ type CalendarProps = {
    * Current date.
    */
   currDate: dayjs.Dayjs;
+
+  /**
+   * Selected date.
+   */
+  selectedDate: dayjs.Dayjs;
 
   /**
    * Date select callback function.
@@ -161,6 +177,7 @@ export class Calendar extends React.Component<CalendarProps, CalendarState> {
         <DatePicker
           renderDate={this.state.renderDate}
           currDate={this.props.currDate}
+          selectedDate={this.props.selectedDate}
           handleDateSelect={this.props.handleDateSelect}
         />
       </div>

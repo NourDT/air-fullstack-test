@@ -40,6 +40,7 @@ export class App extends React.Component<{}, AppState> {
         <div className="px-4 w-1/3">
           <Calendar
             currDate={dayjs()}
+            selectedDate={this.state.selectedDate}
             handleDateSelect={(date: dayjs.Dayjs) =>
               this.handleDateSelect(date)
             }

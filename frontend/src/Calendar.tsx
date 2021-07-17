@@ -19,6 +19,11 @@ type DatePickerProp = {
    * ```
    */
   currDate: dayjs.Dayjs;
+
+  /**
+   * Date select callback function.
+   */
+  handleDateSelect: (date: dayjs.Dayjs) => void;
 };
 
 /**
@@ -28,7 +33,11 @@ type DatePickerProp = {
  * <DatePicker renderDate={dayjs().month(6).startOf("month")} currDate={dayjs()} />
  * ```
  */
-const DatePicker = ({ renderDate, currDate }: DatePickerProp) => (
+const DatePicker = ({
+  renderDate,
+  currDate,
+  handleDateSelect,
+}: DatePickerProp) => (
   <div className="grid grid-cols-7 gap-4 mx-auto place-items-center">
     {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((value) => (
       <p key={`day-${value}`} className="uppercase font-medium pt-4">
@@ -54,6 +63,7 @@ const DatePicker = ({ renderDate, currDate }: DatePickerProp) => (
               disabled ? "" : "border-2 hover:bg-blue-400 hover:text-gray-100"
             }`}
             disabled={disabled}
+            onClick={() => handleDateSelect(elem)}
           >
             {elem.date()}
           </button>
@@ -67,13 +77,18 @@ type CalendarProps = {
    * Current date.
    */
   currDate: dayjs.Dayjs;
+
+  /**
+   * Date select callback function.
+   */
+  handleDateSelect: (date: dayjs.Dayjs) => void;
 };
 
 type CalendarState = {
   /**
-   * Selected date.
+   * Render date.
    */
-  selectedDate: dayjs.Dayjs;
+  renderDate: dayjs.Dayjs;
 };
 
 /**
@@ -88,7 +103,7 @@ export class Calendar extends React.Component<CalendarProps, CalendarState> {
     super(props);
 
     this.state = {
-      selectedDate: props.currDate.startOf("month"),
+      renderDate: props.currDate.startOf("month"),
     };
   }
 
@@ -98,15 +113,15 @@ export class Calendar extends React.Component<CalendarProps, CalendarState> {
         <div className="flex flex-row">
           <input
             type="month"
-            value={this.state.selectedDate.format("YYYY-MM")}
+            value={this.state.renderDate.format("YYYY-MM")}
             min={this.props.currDate.format("YYYY-MM")}
             onChange={(e) => this.handleMonthChange(e)}
           />
           <span className="flex-grow" />
           {/* Left arrow */}
           <button
-            onClick={() => this.handleButton(false)}
-            hidden={this.state.selectedDate.isSame(
+            onClick={() => this.handleArrow(false)}
+            hidden={this.state.renderDate.isSame(
               this.props.currDate.startOf("month")
             )}
           >
@@ -126,7 +141,7 @@ export class Calendar extends React.Component<CalendarProps, CalendarState> {
             </svg>
           </button>
           {/* Right arrow */}
-          <button onClick={() => this.handleButton(true)}>
+          <button onClick={() => this.handleArrow(true)}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-6 w-6"
@@ -144,8 +159,9 @@ export class Calendar extends React.Component<CalendarProps, CalendarState> {
           </button>
         </div>
         <DatePicker
-          renderDate={this.state.selectedDate}
+          renderDate={this.state.renderDate}
           currDate={this.props.currDate}
+          handleDateSelect={this.props.handleDateSelect}
         />
       </div>
     );
@@ -153,17 +169,17 @@ export class Calendar extends React.Component<CalendarProps, CalendarState> {
 
   handleMonthChange(event: React.ChangeEvent<HTMLInputElement>) {
     const newDate = dayjs(event.target.value, "YYYY-MM");
-    this.setState({ selectedDate: newDate });
+    this.setState({ renderDate: newDate });
   }
 
-  handleButton(advance: boolean) {
+  handleArrow(advance: boolean) {
     this.setState((state, props) => {
       const currDate = props.currDate;
       const newDate = advance
-        ? state.selectedDate.add(1, "month")
-        : state.selectedDate.subtract(1, "month");
+        ? state.renderDate.add(1, "month")
+        : state.renderDate.subtract(1, "month");
       return {
-        selectedDate: newDate.isBefore(currDate.startOf("month"))
+        renderDate: newDate.isBefore(currDate.startOf("month"))
           ? currDate.startOf("month")
           : newDate,
       };

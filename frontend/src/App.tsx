@@ -21,7 +21,7 @@ export class App extends React.Component<{}, AppState> {
     return (
       <div className="flex md:flex-row flex-col max-w-3/4 mx-auto my-24 divide-x divide-solid space-4">
         {/* px-4 everywhere is a hack, but it works... */}
-        <div className="px-4 flex-grow">
+        <div className="px-4 w-1/3">
           <Description
             name="John Doe"
             eventTitle="Event name"
@@ -29,13 +29,22 @@ export class App extends React.Component<{}, AppState> {
             eventDescription="I don't know what I'm doing here..."
           />
         </div>
-        <div className="px-4 flex-grow">
-          <Calendar currDate={this.state.selectedDate} />
+        <div className="px-4 w-1/3">
+          <Calendar
+            currDate={dayjs()}
+            handleDateSelect={(date: dayjs.Dayjs) =>
+              this.handleDateSelect(date)
+            }
+          />
         </div>
-        <div className="px-4 flex-grow">
+        <div className="px-4 w-1/3">
           <TimeslotPicker date={this.state.selectedDate} />
         </div>
       </div>
     );
+  }
+
+  handleDateSelect(date: dayjs.Dayjs) {
+    this.setState({ selectedDate: date });
   }
 }

@@ -17,9 +17,9 @@ export const freeSlots = (
   end: Date,
   durationMinutes: number
 ) =>
-  generateSlots(start, end, durationMinutes).filter((slot) =>
-    bookings.every(not(overlaps(slot)))
-  );
+  generateSlots(start, end, durationMinutes)
+    .filter((slot) => bookings.every(not(overlaps(slot))))
+    .map((booking) => booking.startTime);
 
 /**
  * Return true if the two booking slots overlap.

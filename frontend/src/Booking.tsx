@@ -7,7 +7,7 @@ import { freeSlots } from "./schedule";
 import { Prisma, User } from "@prisma/client";
 import { RouteComponentProps } from "react-router";
 
-type BookingProps = RouteComponentProps<{}, any, { user: User }>
+type BookingProps = RouteComponentProps<{}, any, { user: User }>;
 
 type BookingState = {
   selectedDate: dayjs.Dayjs;
@@ -77,6 +77,11 @@ export class Booking extends React.Component<BookingProps, BookingState> {
         {
           endTime: {
             lte: new Date(this.state.selectedDate.endOf("day").valueOf()),
+          },
+        },
+        {
+          userId: {
+            equals: this.props.location.state.user.id,
           },
         },
       ],

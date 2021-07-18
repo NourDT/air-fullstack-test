@@ -36,7 +36,7 @@ export const freeSlots = (
  */
 const overlaps = (first: BookingSlot) => (second: BookingSlot) =>
   !(
-    first.startTime.isSameOrBefore(second.startTime) ||
+    first.endTime.isSameOrBefore(second.startTime) ||
     first.startTime.isSameOrAfter(second.endTime)
   );
 

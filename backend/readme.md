@@ -83,6 +83,12 @@ Generate schema & apply it to database
 $ npx prisma migrate dev
 ```
 
+Populate some dummy users in database
+
+```
+$ node initDb.js
+```
+
 ### Deploy API services using serverless framework
 
 ```
@@ -98,7 +104,7 @@ $ serverless info
 
 Example endpoint URL
 ```
-https://zxey7wk5d6.execute-api.ap-southeast-1.amazonaws.com
+https://zxey7wk5d6.execute-api.ap-southeast-1.amazonaws.com/dev/
 ```
 
 This endpoint URL is needed for the frontend to work.

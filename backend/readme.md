@@ -59,12 +59,17 @@ Example:
 
 ```
 
+Save endpoint URL as environment variable
+```
+$ export DB_ENDPOINT_URL=<URL>
+```
+
 ### Generating schema & initialising database with Prisma
 
 Create .env file
 
 ```
-$ echo "DATABASE_URL=postgresql://$RDS_MASTER_USERNAME:$RDS_MASTER_PASSWORD@<ENDPOINT_URL>:<ENDPOINT_PORT>/postgres?schema=public" > .env
+$ echo "DATABASE_URL=postgresql://$RDS_MASTER_USERNAME:$RDS_MASTER_PASSWORD@$DB_ENDPOINT_URL:5432/postgres?schema=public" > .env
 ```
 
 Example contents of `.env`
@@ -75,8 +80,7 @@ postgresql://<USERNAME>:<PASSWORD>@air-fullstack-aws-db.cube30xhcstp.ap-southeas
 Generate schema & apply it to database
 
 ```
-$ npx prisma generate
-$ npx prisma 
+$ npx prisma migrate dev
 ```
 
 ### Deploy API services using serverless framework
@@ -100,3 +104,5 @@ https://zxey7wk5d6.execute-api.ap-southeast-1.amazonaws.com
 This endpoint URL is needed for the frontend to work.
 
 [Frontend setup](../frontend/readme.md)
+
+> Remember to tear down the deployment once you're done with it!

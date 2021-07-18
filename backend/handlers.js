@@ -4,6 +4,30 @@ const { PrismaClient } = require("@prisma/client");
 
 const prisma = new PrismaClient();
 
+const getUsersHandler = async () => {
+  try {
+    const users = await prisma.user.findMany();
+    return {
+      statusCode: 200,
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+      body: JSON.stringify(users),
+    };
+  } catch (e) {
+    console.error(e);
+    return {
+      statusCode: 500,
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+      body: JSON.stringify(e),
+    };
+  }
+};
+
 const getUserHandler = async (event) => {
   try {
     const data = JSON.parse(event.body);
@@ -12,9 +36,7 @@ const getUserHandler = async (event) => {
       statusCode: 200,
       headers: {
         "Content-Type": "application/json",
-        "Access-Control-Allow-Headers": "*",
         "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "OPTIONS,POST,GET",
       },
       body: JSON.stringify(user),
     };
@@ -24,9 +46,7 @@ const getUserHandler = async (event) => {
       statusCode: 500,
       headers: {
         "Content-Type": "application/json",
-        "Access-Control-Allow-Headers": "*",
         "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "OPTIONS,POST,GET",
       },
       body: JSON.stringify(e),
     };
@@ -41,9 +61,7 @@ const getEventsHandler = async (event) => {
       statusCode: 200,
       headers: {
         "Content-Type": "application/json",
-        "Access-Control-Allow-Headers": "*",
         "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "OPTIONS,POST,GET",
       },
       body: JSON.stringify(events),
     };
@@ -53,9 +71,7 @@ const getEventsHandler = async (event) => {
       statusCode: 500,
       headers: {
         "Content-Type": "application/json",
-        "Access-Control-Allow-Headers": "*",
         "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "OPTIONS,POST,GET",
       },
       body: JSON.stringify(e),
     };
@@ -70,9 +86,7 @@ const createEventHandler = async (event) => {
       statusCode: 200,
       headers: {
         "Content-Type": "application/json",
-        "Access-Control-Allow-Headers": "*",
         "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "OPTIONS,POST,GET",
       },
       body: JSON.stringify(createdEvent),
     };
@@ -80,15 +94,14 @@ const createEventHandler = async (event) => {
     console.error(e);
     return {
       statusCode: 500,
-      "Access-Control-Allow-Headers": "*",
       "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Methods": "OPTIONS,POST,GET",
       body: JSON.stringify(e),
     };
   }
 };
 
 module.exports = {
+  getUsersHandler,
   getUserHandler,
   getEventsHandler,
   createEventHandler,

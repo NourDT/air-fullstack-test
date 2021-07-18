@@ -9,18 +9,27 @@ provider:
   lambdaHashingVersion: 20201221
 
 functions:
+  getUsers:
+    handler: handlers.getUsersHandler
+    events:
+      - http:
+          method: GET
+          path: /users
+          cors: true
   getUser:
     handler: handlers.getUserHandler
     events:
       - http:
           method: GET
           path: /user
+          cors: true
   createEvent:
     handler: handlers.createEventHandler
     events:
       - http:
           method: POST
           path: /event
+          cors: true
   getEvents:
     handler: handlers.getEventsHandler
     events:

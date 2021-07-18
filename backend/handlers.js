@@ -1,36 +1,8 @@
 "use strict";
 
-const { Prisma, PrismaClient } = require("@prisma/client");
+const { PrismaClient } = require("@prisma/client");
 
 const prisma = new PrismaClient();
-
-const createUserHandler = async (event) => {
-  try {
-    const data = JSON.parse(event.body);
-    const createdUser = await prisma.user.create({ data });
-
-    return {
-      statusCode: 200,
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(createdUser),
-    };
-  } catch (e) {
-    if (e instanceof Prisma.PrismaClientKnownRequestError) {
-      if (e.code == "P2002") {
-        return {
-          statusCode: 409,
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            error: "A user with this email already exists",
-          }),
-        };
-      }
-
-      console.error(e);
-      return { statusCode: 500 };
-    }
-  }
-};
 
 const getUserHandler = async (event) => {
   try {
@@ -38,32 +10,24 @@ const getUserHandler = async (event) => {
     const user = await prisma.user.findFirst(data);
     return {
       statusCode: 200,
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Headers": "*",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "OPTIONS,POST,GET",
+      },
       body: JSON.stringify(user),
     };
   } catch (e) {
     console.error(e);
     return {
       statusCode: 500,
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(e),
-    };
-  }
-};
-
-const getUsersHandler = async () => {
-  try {
-    const users = await prisma.user.findMany();
-    return {
-      statusCode: 200,
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(users),
-    };
-  } catch (e) {
-    console.error(e);
-    return {
-      statusCode: 500,
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Headers": "*",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "OPTIONS,POST,GET",
+      },
       body: JSON.stringify(e),
     };
   }
@@ -75,32 +39,24 @@ const getEventsHandler = async (event) => {
     const events = await prisma.event.findMany(data);
     return {
       statusCode: 200,
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Headers": "*",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "OPTIONS,POST,GET",
+      },
       body: JSON.stringify(events),
     };
   } catch (e) {
     console.error(e);
     return {
       statusCode: 500,
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(e),
-    };
-  }
-};
-
-const getEventHandler = async (event) => {
-  try {
-    const data = JSON.parse(event.body);
-    const event = await prisma.event.findFirst(data);
-    return {
-      statusCode: 200,
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(event),
-    };
-  } catch (e) {
-    return {
-      statusCode: 500,
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Headers": "*",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "OPTIONS,POST,GET",
+      },
       body: JSON.stringify(e),
     };
   }
@@ -109,23 +65,31 @@ const getEventHandler = async (event) => {
 const createEventHandler = async (event) => {
   try {
     const data = JSON.parse(event.body);
-    const event = await prisma.event.create(data);
+    const createdEvent = await prisma.event.create(data);
     return {
       statusCode: 200,
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(event),
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Headers": "*",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "OPTIONS,POST,GET",
+      },
+      body: JSON.stringify(createdEvent),
     };
   } catch (e) {
     console.error(e);
-    return { statusCode: 500 };
+    return {
+      statusCode: 500,
+      "Access-Control-Allow-Headers": "*",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "OPTIONS,POST,GET",
+      body: JSON.stringify(e),
+    };
   }
 };
 
 module.exports = {
-  createUserHandler,
   getUserHandler,
-  getUsersHandler,
   getEventsHandler,
-  getEventHandler,
   createEventHandler,
 };

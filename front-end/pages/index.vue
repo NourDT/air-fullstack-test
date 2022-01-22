@@ -2,8 +2,8 @@
   <v-container>
     <h1>Client Appointment link:</h1>
     <div>
-      <router-link :to="`/appointment/${this.appointmentId}`">
-      {{ this.appointmentId }} </router-link>
+      <NuxtLink :to="`/appointment/${this.appointmentId}`">
+      {{ this.appointmentId }} </NuxtLink>
     </div>
   </v-container>
 </template>

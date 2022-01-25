@@ -1,3 +1,4 @@
+import axios from 'axios'
 import moment from 'moment-timezone'
 
 const dateToday = () => {
@@ -9,7 +10,9 @@ export const state = () => ({
     currentDate: dateToday,
     loading: false,
     timezone: 'Asia/Kuala_Lumpur',
-    availableSlot: []
+    availableSlot: [],
+    selectedTime: null,
+    allAppointments: []
 })
 
 export const getters = {
@@ -22,6 +25,10 @@ export const getters = {
     }, 
     getAvailableSlot: (state) => {
         return state.availableSlot;
+    },
+    // get all appointment state
+    getAllAppointments: (state) => {
+        return state.allAppointments
     }
 }
 
@@ -41,6 +48,10 @@ export const mutations = {
         state.selectedDate = null
     },
 
+    selectedTime(state, time) {
+        state.selectedTime = time
+    },
+
     availableSlot(state) {
         const selectedDate = state.selectedDate;
 
@@ -58,6 +69,7 @@ export const mutations = {
 
         workingHours.filter(slot => {
             const [ slotHour, slotMinute ] = slot.split(':')
+            console.log(slotHour, currentHour)
             // validates the current date
             if (slotHour === currentHour && currentMinute < slotMinute && isDateToday ) {
                 return false
@@ -69,10 +81,40 @@ export const mutations = {
         })
   
         state.availableSlot = availableSlot
+    },
+    setAllAppointment(state, appointments) {
+        state.allAppointments = appointments;
     }
 }
 
 export const actions = {
+    async createAppointment({ state }, uuid) {
 
+        try {
+            const { data } = await axios.post('https://d98wd0ktw4.execute-api.us-east-1.amazonaws.com/dev/appointment', 
+            {
+                date: state.selectedDate,
+                time: state.selectedTime,
+                id: uuid
+            })
+    
+            return data;
+        } catch(e) {
+            alert('endpoint have an issue please contact the developers');
+        }     
+    },
+
+    async showAllAppointmentsDate({ commit }) {
+        // show all the appointments
+
+        try {
+            const { data } = await axios.get(`https://d98wd0ktw4.execute-api.us-east-1.amazonaws.com/dev/appointment`);
+            console.log('get all appointment', data)
+            commit('setAllAppointment', data.appointment);
+        } catch (e) {
+            alert('endpoint have an issue please contact the developers');
+        }
+      
+    }
 }
 

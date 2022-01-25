@@ -5,7 +5,7 @@
                 Appointment created 
             </v-card-title>
             <v-card-text>
-                <p>Thank you, Your appointment has been approved.</p>
+                <p>{{ message }}</p>
                    <router-link to="/">Back to home</router-link>
             </v-card-text>
 
@@ -29,6 +29,11 @@
             model: {
                 default: () => {
                     return 'thankyou-modal'
+                }
+            },
+            message: {
+                default: () => {
+                    return 'Thank you, Your appointment has been approved.'
                 }
             }
         }, 

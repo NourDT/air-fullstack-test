@@ -1,0 +1,44 @@
+service: aws-backend-api
+
+plugins:
+  - serverless-offline
+
+# remove the unnecessary packages to keep small upload size
+package:
+  exclude:
+    - node_modules/typescript/**
+    - node_modules/@types/**
+
+provider:
+  name: aws
+  lambdaHashingVersion: 20201221
+  runtime: nodejs14.x
+  memorySize: 128
+  stage: ${opt:stage, 'dev'}
+  region: ${opt:region, 'us-east-1'}
+  environment:
+    APPOINTMENT_TABLE: ${self:custom.AppointmentsTable.name}
+  apiGateway:
+    shouldStartNameWithService: true
+  iamRoleStatements:
+    - ${file(resources/iamAppointmentsTable.yml):AppointmentsTableIAM}
+
+# create a dynamodb in aws
+resources:
+  Resources:
+    AppointmentsTable: ${file(resources/AppointmentTable.yml):AppointmentsTable}
+    
+custom:
+  AppointmentsTable:
+    name: !Ref AppointmentsTable
+    arn: !GetAtt AppointmentsTable.Arn
+
+functions:
+  main:
+    handler: dist/index.handler
+    events:
+      - http:
+          path: /{any+}
+          method: any
+          cors:
+            origin: '*'

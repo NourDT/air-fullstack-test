@@ -1,0 +1,4 @@
+{
+  "httpMethod": "POST",
+  "body": "{\"date\":\"20220126\",\"startTime\":\"0000\",\"endTime\":\"0010\",\"candidateInfo\":{\"name\":\"Joema Nequinto\"}}"
+}

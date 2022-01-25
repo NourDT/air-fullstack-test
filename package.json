@@ -1,0 +1,25 @@
+{
+  "name": "air-fullstack-test",
+  "version": "1.0.0",
+  "description": "Make sure you read **all** of this document carefully, and follow the guidelines in it.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JoemaNequinto/air-fullstack-test.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JoemaNequinto/air-fullstack-test/issues"
+  },
+  "homepage": "https://github.com/JoemaNequinto/air-fullstack-test#readme",
+  "devDependencies": {
+    "eslint": "^8.7.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.25.4"
+  }
+}

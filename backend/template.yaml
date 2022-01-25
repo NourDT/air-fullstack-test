@@ -1,0 +1,85 @@
+# This is the SAM template that represents the architecture of your serverless application
+# https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-template-basics.html
+
+# The AWSTemplateFormatVersion identifies the capabilities of the template
+# https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/format-version-structure.html
+AWSTemplateFormatVersion: 2010-09-09
+Description: >-
+  backend
+
+# Transform section specifies one or more macros that AWS CloudFormation uses to process your template
+# https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/transform-section-structure.html
+Transform:
+  - AWS::Serverless-2016-10-31
+
+# Resources declares the AWS resources that you want to include in the stack
+# https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/resources-section-structure.html
+Resources:
+  # This is a Lambda function config associated with the source code: get-appointments-by-date.js
+  getAppointmentsByDateFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src/handlers/get-appointments-by-date.handler
+      Runtime: nodejs14.x
+      MemorySize: 128
+      Timeout: 100
+      Description: Fetch all appointments given a date (YYYYMMDD)
+      Policies:
+        # Give Create/Read/Update/Delete Permissions to the AppointmentTable
+        - DynamoDBCrudPolicy:
+            TableName: !Ref AppointmentTable
+      Environment:
+        Variables:
+          # Make table name accessible as environment variable from function code during execution
+          AppointmentTable: !Ref AppointmentTable
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /appointments/{date}
+            Method: GET
+
+  # This is a Lambda function config associated with the source code: put-appointment.js
+  putAppointmentFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src/handlers/put-appointment.handler
+      Runtime: nodejs14.x
+      MemorySize: 128
+      Timeout: 100
+      Description: Book an appointment in the given date with start time and end time.
+      Policies:
+        # Give Create/Read/Update/Delete Permissions to the AppointmentTable
+        - DynamoDBCrudPolicy:
+            TableName: !Ref AppointmentTable
+      Environment:
+        Variables:
+          # Make table name accessible as environment variable from function code during execution
+          AppointmentTable: !Ref AppointmentTable
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /appointments
+            Method: POST
+
+  # DynamoDB table to store appointments: PK - date (YYYYMMDD), SK - concat start time and end time
+  AppointmentTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: 'PK'
+          AttributeType: 'S'
+        - AttributeName: 'SK'
+          AttributeType: 'S'
+      KeySchema:
+        - AttributeName: 'PK'
+          KeyType: 'HASH'
+        - AttributeName: 'SK'
+          KeyType: 'RANGE'
+      BillingMode: PAY_PER_REQUEST
+
+Outputs:
+  WebEndpoint:
+    Description: 'Api Gateway endpoint URL for Prod stage'
+    Value: !Sub 'https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/'

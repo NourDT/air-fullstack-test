@@ -1,0 +1,19 @@
+AppointmentsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: appointments
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: date
+          AttributeType: S
+        - AttributeName: time
+          AttributeType: S
+      KeySchema:
+        - AttributeName: date
+          KeyType: HASH
+        - AttributeName: time
+          KeyType: RANGE
+
+
+        
+     

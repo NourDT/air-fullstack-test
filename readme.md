@@ -73,3 +73,37 @@ Fork this repo and send us a pull request when you think you are done. **Please 
 > What if I have a question?
 
 Email nour@airecruiter.com for any questions. 
+
+
+
+
+----
+## Tech stack
+- FRONTEND
+    - [NUXTJS] (https://nuxtjs.org)
+    - [Vuetify](https://vuetifyjs.com/en/), 
+    - [MomentJS](https://momentjs.com/)
+
+- BACKEND
+    - Serveless framework
+    - NESTJS for Backend
+    - Dynamodb 
+
+- Serverless install all the packages that u need to deploy
+- The GET `dev/appointments?date=2021-01-26` will response on the date that mention in the url
+- The GET `dev/appointment` will get all the dates that are saved in the database
+- The POST `dev/appointment` endpoint will allow to create an appointment. The api needs the body of `date`, `time` and `id` and it will validates the time and date before insert in the database.
+
+
+# run the code
+```
+cd front-end && yarn install && yarn dev
+```
+```
+cd back-end
+```
+Install first the serverless and setup aws config
+```
+yarn build && sls deploy 
+```
+it will install atomatically in the aws all the setups in the serverless

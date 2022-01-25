@@ -49,7 +49,6 @@
                 no-title
                  :min="dateStart" 
                  full-width 
-                 :events="appointments"
                  @change="dateSelected"
                 />
             </v-col>
@@ -115,19 +114,6 @@ export default {
             this.showThankyouModal = false
             // redirect back to home page
             location.replace('/');
-        }, 
-        appointments(date) {
-            const [year,month, day] = date.split('-')
-            
-            const appointmentDetails = this.getAllAppointments();
-        
-           
-            appointmentDetails.forEach(({ date }) => {
-                const [aYear,aMonth,aDay] = date.split('-')
-                if (aYear === year && month === aMonth && aDay === day) {
-                    console.log(day,aDay)
-                }
-            })   
         }
     }
 }

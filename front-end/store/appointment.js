@@ -59,22 +59,26 @@ export const mutations = {
         const currentTime = currentDate[1].split(":");
         const currentHour = currentTime[0];
         const currentMinute = currentTime[1];
-        const isDateToday = (selectedDate == currentDate);
+        const isDateToday = (selectedDate == currentDate[0]);
 
         // Set a working hours start at 1pm ends to 6pm;
         const workingHours = ['13:00', '13:30', '14:00', '14:30', '15:00', '15:30'];
 
         // Set availableSlot
         let availableSlot = [];
-
+     
         workingHours.filter(slot => {
             const [ slotHour, slotMinute ] = slot.split(':')
-            console.log(slotHour, currentHour)
+           
             // validates the current date
             if (slotHour === currentHour && currentMinute < slotMinute && isDateToday ) {
                 return false
-            } else {
-                return true
+            } else { 
+                if (slotHour < currentHour && isDateToday) {
+                    return false;
+                }
+                const filterAppointments = state.allAppointments.filter(({date, time}) => (date === currentDate[0] && time === slot))
+                return !(filterAppointments.length > 0) ? true: false;
             }
         }).forEach(slot => {
             availableSlot.push(slot)

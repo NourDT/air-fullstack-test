@@ -1,0 +1,18 @@
+Resources:
+  CandidatesTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: CandidatesTable
+      KeySchema:
+        - AttributeName: pk
+          KeyType: HASH
+        - AttributeName: id
+          KeyType: RANGE
+      AttributeDefinitions:
+        - AttributeName: pk
+          AttributeType: S
+        - AttributeName: id
+          AttributeType: S
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1

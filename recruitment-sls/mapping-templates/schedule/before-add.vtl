@@ -1,0 +1,10 @@
+#set($userId = $util.defaultIfNullOrBlank($ctx.args.input.get("user"), "USR#${ctx.identity.username}"))
+$util.qr($ctx.stash.put("partitionKey", $userId))
+#set($searcheable = [ "name", "contactName", "email"])
+$util.qr($ctx.stash.put("searcheable", $searcheable))
+
+$util.qr($ctx.args.input.put("__typename", "SCHEDULE"))
+$util.qr($ctx.args.input.put("__typeshort", "SCD"))
+$util.qr($ctx.args.input.put("owner", $userId))
+
+{}

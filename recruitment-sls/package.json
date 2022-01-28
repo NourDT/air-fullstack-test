@@ -1,0 +1,60 @@
+{
+  "name": "air-custom-api",
+  "version": "1.0.0",
+  "description": "A serverless starter project for creating MultiSoft Client Custom API integrations",
+  "scripts": {
+    "install:quiet": "npm install --no-progress --silent",
+    "install:refresh": "rm -rf ./node_modules && npm run-script install:quiet",
+    "lint:fix": "eslint \"**/*.js\" --fix",
+    "lint": "eslint \"**/*.js\"",
+    "test": "jest --silent --setupFiles dotenv/config",
+    "test:setenv": "rm -f .env && cp .env.test.example .env",
+    "test:dev": "npx majestic",
+    "test:debug": "",
+    "check": "npm run-script lint && npm run-script test:setenv && npm run-script test"
+  },
+  "majestic": {
+    "args": [
+      "--setupFiles dotenv/config"
+    ]
+  },
+  "author": "Danrem B. Peña <danrem@multisoft.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "aws-sdk-mock": "^4.4.0",
+    "axios": "^0.25.0",
+    "axios-mock-adapter": "^1.16.0",
+    "babel-core": "^6.26.3",
+    "babel-eslint": "^10.0.1",
+    "babel-loader": "^7.1.5",
+    "babel-plugin-source-map-support": "^1.0.0",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-stage-3": "^6.24.1",
+    "dotenv": "^7.0.0",
+    "eslint": "^5.16.0",
+    "eslint-config-standard": "^12.0.0",
+    "eslint-plugin-import": "^2.17.3",
+    "eslint-plugin-node": "^9.1.0",
+    "eslint-plugin-promise": "^4.1.1",
+    "eslint-plugin-standard": "^4.0.0",
+    "faker": "^4.1.0",
+    "jest": "^21.2.1",
+    "jest-each": "^24.8.0",
+    "jsonwebtoken": "^8.5.1",
+    "serverless-offline": "^3.33.0",
+    "serverless-pseudo-parameters": "^2.4.0",
+    "serverless-webpack": "^5.3.1",
+    "webpack": "^4.34.0",
+    "webpack-node-externals": "^1.7.2"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.475.0",
+    "babel-runtime": "^6.26.0",
+    "jwt-decode": "^2.2.0",
+    "moment": "latest",
+    "object-hash": "^1.3.1",
+    "source-map-support": "^0.4.18",
+    "uuidv5": "^1.0.0"
+  }
+}

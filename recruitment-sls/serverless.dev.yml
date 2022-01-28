@@ -1,0 +1,94 @@
+service: air-custom-api
+
+# Use the serverless-webpack plugin to transpile ES6
+plugins:
+  - serverless-webpack
+  - serverless-offline
+
+# serverless-webpack configuration
+# Enable auto-packing of external modules
+custom:
+  stage: ${opt:stage, self:provider.stage}
+  ssmParamNamespace: /air/${self:custom.stage}
+  sqsRetriesQueueName: air-custom-api-${self:custom.stage}-topics
+  snsTopicName: air-custom-api-${self:custom.stage}-topics
+  webpack:
+    webpackConfig: ./webpack.config.js
+    includeModules: true
+  mappingTemplates:
+    - ${file(mapping-templates/mapping-templates.yml)}
+  dynamoDbName: table/air_candidate_tbl
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: dev
+  region: us-east-1
+  environment: ${file(env.yml):${self:custom.stage}}
+  lambdaHashingVersion: 20201221
+  variablesResolutionMode: 20210326
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - ssm:GetParameter
+            - ssm:PutParameter
+            - ssm:GetParameters
+            - ssm:GetParametersByPath
+            - ssm:GetParameterHistory
+          Resource:
+            - "arn:aws:ssm:${aws:region}:${aws:accountId}:parameter${self:custom.ssmParamNamespace}/*"
+        - Effect: Allow
+          Action:
+            - sns:Publish
+          Resource:
+            - "arn:aws:sns:${aws:region}:${aws:accountId}:${self:custom.snsTopicName}"
+        - Effect: Allow
+          Action:
+            - sqs:DeleteMessage
+            - sqs:GetQueueUrl
+            - sqs:SendMessage
+            - sqs:GetQueueAttributes
+            - sqs:ChangeMessageVisibility
+          Resource:
+            - "arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.sqsRetriesQueueName}"
+        - Effect: Allow
+          Action:
+            - dynamodb:DescribeTable
+            - dynamodb:Query
+            - dynamodb:Scan
+            - dynamodb:BatchGetItem
+            - dynamodb:GetItem
+            - dynamodb:PutItem
+            - dynamodb:UpdateItem
+            - dynamodb:DeleteItem
+          Resource:
+            - "arn:aws:dynamodb:${aws:region}:${aws:accountId}:${self:custom.dynamoDbName}"
+
+functions:
+  getDataList:
+    handler: handlers/get-data-handler.main
+    events:
+      - http:
+          path: schedule
+          method: get
+          cors: true
+  addSchedule:
+    handler: handlers/add-schedule-handler.main
+    events:
+      - http:
+          path: schedule
+          method: post
+          cors: true
+  addUser:
+    handler: handlers/add-user-handler.main
+    events:
+      - http:
+          path: user
+          method: post
+          cors: true
+
+resources:
+  - ${file(resources/sns-topic.yml)}
+  - ${file(resources/base-table.yml)}

@@ -1,0 +1,15 @@
+#set($id = $utils.defaultIfNullOrBlank($ctx.args.input.get("id"), $util.autoId()))
+
+$util.qr($ctx.args.input.put("createdAt", $util.time.nowISO8601()))
+$util.qr($ctx.args.input.put("__typename", "User"))
+$util.qr($ctx.args.input.put("__typeshort", "USR"))
+
+{
+    "version": "2017-02-28",
+    "operation": "PutItem",
+    "key": {
+        "pk": $util.dynamodb.toDynamoDBJson("USR#$id"),
+        "id": $util.dynamodb.toDynamoDBJson("USR#$id")
+    },
+    "attributeValues": $util.dynamodb.toMapValuesJson($ctx.args.input)
+}

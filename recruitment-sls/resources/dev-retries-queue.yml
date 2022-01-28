@@ -1,0 +1,7 @@
+Resources:
+  DevRetriesQueue:
+    Type: "AWS::SQS::Queue"
+    Properties:
+      QueueName: ${self:custom.sqsRetriesQueueName}
+      ReceiveMessageWaitTimeSeconds: 0
+      VisibilityTimeout: 300

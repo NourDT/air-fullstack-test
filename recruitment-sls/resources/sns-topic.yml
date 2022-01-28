@@ -1,0 +1,6 @@
+Resources:
+  ClientCustomApiTopic:
+    Type: 'AWS::SNS::Topic'
+    Properties:
+      DisplayName: AIR Custom API
+      TopicName: ${self:custom.snsTopicName}

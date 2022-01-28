@@ -1,0 +1,13 @@
+{
+  "messageId": "message.MessageId",
+  "source": "aws.lambda",
+  "invoker": {
+    "functionName": "testFunction",
+    "functionVersion": "1",
+    "invokedFunctionArn": "arn:::testFunction"
+  },
+  "receiptHandle": "",
+  "retries": "",
+  "payload": "",
+  "md5Payload": ""
+}

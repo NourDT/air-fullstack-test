@@ -1,0 +1,9 @@
+- type: Mutation
+  field: addSchedule
+  request: ./schedule/before-add.vtl
+  response: ./set-shared-response.vtl
+
+- type: Mutation
+  field: addUser
+  request: ./user/add-user.vtl
+  response: ./default.vtl

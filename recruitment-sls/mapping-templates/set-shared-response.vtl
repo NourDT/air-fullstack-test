@@ -1,0 +1,16 @@
+#if($ctx.error)
+  $util.error($ctx.error.message, $ctx.error.type, $ctx.result)
+#end
+
+#if($util.isNull($ctx.result) || $util.isNull($ctx.result.get("owner")))
+  #return
+#end
+
+#set($ownerUserId = $util.defaultIfNullOrBlank($ctx.stash.get("ownerUserId"), "USR#$ctx.identity.username"))
+#if ($ctx.result.get("owner") == $ownerUserId)
+    $util.qr($ctx.result.put("isShared", false))
+#else
+    $util.qr($ctx.result.put("isShared", true))
+#end
+
+$util.toJson($ctx.result)

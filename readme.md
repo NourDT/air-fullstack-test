@@ -64,19 +64,6 @@ Be prepared to talk about
 - Talk about the tech stack and any libraries used in your project and why you chose them 
 - Your design and code should meet these requirements and be sufficiently flexible to allow for future extensibility. Code should be well structured and suitably commented.
 
-## Q&A
-
-> Where should I send back the result when I'm done?
-
-Fork this repo and send us a pull request when you think you are done. **Please make sure you adhere to the deadline mentioned in email/message sent to you along with this link** 
-
-> What if I have a question?
-
-Email nour@airecruiter.com for any questions. 
-
-
-
-
 ----
 ## Tech stack
 - FRONTEND
